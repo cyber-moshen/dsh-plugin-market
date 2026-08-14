@@ -1,64 +1,70 @@
-# dsh-plugin-market
+ @cyber-moshen/dsh-plugin-market
 
-**Plugin Workshop** for the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) web GUI — a curated plugin catalog that lives in this very repo.
+**Plugin Workshop** for the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) web GUI 鈥?a curated plugin catalog that lives in this very repo.
 
-[中文](README.zh.md) · [日本語](README.ja.md)
+[涓枃](README.zh.md) 路 [鏃ユ湰瑾瀅(README.ja.md)
 
 ## What it is
 
-A **Settings → Plugin Workshop (插件工坊)** page with:
+A **Settings 鈫?Plugin Workshop (鎻掍欢宸ュ潑)** page with:
 
-- a **card grid** of community plugins — each card shows **tags** (click a tag to search it), **GitHub stars**, **last-commit freshness** with a colored maintenance signal, and the **installed version / update state**;
+- a **card grid** of community plugins 鈥?each card shows **tags** (click a tag to search it), **GitHub stars**, **last-commit freshness** with a colored maintenance signal, and the **installed version / update state**;
 - **search across names, authors and tags**, plus an always-visible filter bar (installed state, sort by stars/commit, maintenance state);
-- **one-click install / update** (runs the real `dsh plugin` CLI in the background, with all environment quirks handled — see below);
+- **one-click install / update** (runs the real `dsh plugin` CLI in the background);
 - a **GitHub icon button** on every card jumping straight to the repo;
 - a **settings modal** with a **GitHub Token** field (lifts API rate limits) and a **startup auto-update** toggle;
-- the **whole workshop follows the app's own language** (Settings → General → Language: 中文 / English);
-- a frame-wide **"plugins auto-updated — restart to apply"** toast after a boot-time auto-update.
+- the **whole workshop follows the app's own language** (Settings 鈫?General 鈫?Language: 涓枃 / English);
+- a frame-wide **"plugins auto-updated 鈥?restart to apply"** toast after a boot-time auto-update.
 
-**The catalog is this repo's own `data/plugins.json`** — anyone can add a plugin by opening a pull request (see [Contributing](#submitting-a-pr-to-add-your-plugin)). The plugin fetches it from here at runtime (mirror chain), with the bundled copy as an offline snapshot.
+**The catalog is this repo's own `data/plugins.json`** 鈥?anyone can add a plugin by opening a pull request (see [Submitting a PR](#submitting-a-pr-to-add-your-plugin)). The plugin fetches it live at runtime; there is no offline cache or snapshot.
 
 ## Install
 
+One command from anywhere (once published to npm):
+
 ```sh
-# from a directory containing this repo checkout:
-dsh plugin --profile web add ./dsh-plugin-market -w
-# restart the web server, then open Settings → Plugin Workshop
+dsh plugin --profile web add @cyber-moshen/dsh-plugin-market
 ```
+
+From a local checkout:
+
+```sh
+dsh plugin --profile web add ./dsh-plugin-market -w
+```
+
+Restart the web server, then open **Settings 鈫?Plugin Workshop**.
 
 ## Usage
 
 ### The workshop page
 
-1. Open **Settings → Plugin Workshop**.
-2. **Search** — type anything; it matches plugin name, description, author **and tags**. Click a `#tag` on a card to search that tag.
+1. Open **Settings 鈫?Plugin Workshop**.
+2. **Search** 鈥?matches plugin name, author **and tags**. Click a `#tag` on a card to search that tag.
 3. **Filter bar** (always visible under the search box):
-   - **Installed** — All / Installed / Not installed
-   - **Sort** — Stars ↑ · Stars ↓ · Commit ↑ · Commit ↓
-   - **Maintenance** — All / Active / Stale / Unmaintained / Unknown
+   - Installed 鈥?All / Installed / Not installed
+   - Sort 鈥?Stars 鈫?路 Stars 鈫?路 Commit 鈫?路 Commit 鈫?   - Maintenance 鈥?All / Active / Stale / Unmaintained / Unknown
 4. **Card actions**:
-   - ⭐ Stars and 🕓 last commit come from the GitHub API (see [data sources](#data-and-rate-limits)); the maintenance tile is colored: green = pushed within 3 months, amber = within a year, red = older / archived.
-   - **Not installed** → `Install` button.
-   - **Installed, newer version available** → `Installed vX` + `Update → vY` button.
-   - **Installed, current** → just `Installed vX` (no button). (Uninstall is available from the native plugin list / CLI.)
+   - 猸?Stars and 馃晸 last commit are fetched live from the GitHub API; the maintenance tile is colored: green = pushed within 3 months, amber = within a year, red = older / archived.
+   - **Not installed** 鈫?`Install` button (installs from the GitHub URL, or the npm package when one is published).
+   - **Installed, newer version available** 鈫?`Installed vX` + `Update 鈫?vY`.
+   - **Installed, current** 鈫?just `Installed vX`.
    - The GitHub icon (top-right) opens the repo page.
 
 ### Settings modal (the `Settings` button next to the search box)
 
-- **Language** — the workshop follows the app's own setting (Settings → General → Language; 中文 / English). No separate switch needed.
-- **GitHub Token (optional)** — paste a token to raise the API rate limit from 60 requests/hour to 5000/hour. See [How to get a token](#how-to-get-a-github-token). The `GITHUB_TOKEN` / `GH_TOKEN` environment variables take precedence.
-- **Auto-update installed plugins on startup** — when enabled, the web server checks installed plugins after boot and updates any with newer versions; once done, a toast on the home page asks you to restart the web server to apply.
+- **GitHub Token (optional)** 鈥?paste a token to raise the API rate limit from 60 requests/hour to 5000/hour. See [How to get a token](#how-to-get-a-github-token). The `GITHUB_TOKEN` / `GH_TOKEN` environment variables take precedence. Saving an empty box never clears a stored token; use the `Clear` button to remove it.
+- **Auto-update installed plugins on startup** 鈥?when enabled, the web server checks installed plugins after boot and updates any with newer versions; once done, a toast on the home page asks you to restart the web server to apply.
 
 ## How to get a GitHub Token
 
-1. Go to <https://github.com/settings/tokens> (Settings → Developer settings → Personal access tokens).
+1. Go to <https://github.com/settings/tokens> (Settings 鈫?Developer settings 鈫?Personal access tokens).
 2. Click **Generate new token (classic)**.
 3. Give it a name (e.g. `dsh-plugin-market`), set an expiry.
 4. Tick the **`repo`** scope (that is all this plugin needs).
 5. Click **Generate token** and **copy it now** (it is shown only once).
-6. Paste it into the workshop **Settings** modal and press **Save**. A ✓ appears once a token is stored.
+6. Paste it into the workshop **Settings** modal and press **Save**. A `鉁?Token saved (路路路xxxx)` line appears once a token is stored.
 
-> Keep the token private — it grants write access to your repositories.
+> Keep the token private 鈥?it grants write access to your repositories.
 
 ## Submitting a PR to add your plugin
 
@@ -67,47 +73,28 @@ The catalog is a single JSON file: [`data/plugins.json`](data/plugins.json).
 1. Open `data/plugins.json` in this repo on GitHub.
 2. Click the pencil (**Edit**) button.
 3. Copy an existing entry, change it to your plugin, insert it inside `"plugins": [...]`.
-4. **Commit changes… → Propose changes → Create pull request.**
+4. **Commit changes鈥?鈫?Propose changes 鈫?Create pull request.**
 
-A validation workflow runs on every PR and fails on malformed JSON or missing fields (you can run it locally with `node scripts/validate.mjs data/plugins.json`).
+A validation workflow runs on every PR and fails on malformed JSON or missing fields (run it locally with `node scripts/validate.mjs data/plugins.json`).
 
-Entry shape (keep it simple — everything else is derived from the URL):
+Entry shape (keep it simple 鈥?everything else is derived from the URL):
 
 ```jsonc
 {
   "url": "https://github.com/you/your-plugin",  // your repo URL (required, unique)
-  "tags": ["记忆增强", "UI美化"],                 // 0-5 searchable tags (optional)
-  "npm": "your-npm-package"                     // npm name if published (optional: one-click install + version checks)
+  "tags": ["璁板繂澧炲己", "UI缇庡寲"],                 // 0-5 searchable tags (optional)
+  "npm": "your-npm-package"                     // npm name if published (optional: one-click install via npm + version checks)
 }
 ```
 
-The card name, author, install command and stats (stars / last commit) are all derived from `url` automatically. `npm` is only needed for npm-published plugins.
+The card name, author, install command and stats are all derived from `url`. The `npm` field is only needed when the plugin is published to npm 鈥?without it, installation still works via the GitHub URL.
 
-## Data and rate limits
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
-- **Catalog** — this repo's `data/plugins.json`, fetched live at runtime over a mirror chain (ghproxy → gh-proxy → ghfast → raw.githubusercontent → github.com/raw). **No offline snapshot**: if the network is down, the workshop shows a fetch error instead of stale data.
-- **Stars / last commit** — fetched live from the GitHub API and held in memory for a few minutes (never written to disk). Without a token the anonymous limit is **60 requests/hour**; shields.io badges are used as a fallback when rate-limited. Configure a token in the workshop settings to lift the limit to 5000/hour.
-- **Versions** — npm registry for npm-published plugins, the repo's `package.json` otherwise (no API quota involved).
+## Publishing this plugin to npm
 
-## Why the odd install flags?
-
-Profiles are pnpm workspace roots, so every pnpm call passes `-w`. Several `@deepseek-ai` peer packages carry a broken `latest` dist-tag on npmjs (0.0.1-rc.1 depends on the unpublished `@deepseek-ai/dsh-compact`), so installs pin the standard peers (`@deepseek-ai/cordis`, `dsh-client-runtime`, `dsh-client-ui-slots`, `react`) to the versions already in the profile. Full-app plugins (TUI clients etc.) are refused for the web profile (api-gateway conflict guard).
-
-## Troubleshooting
-
-- **"not found is not valid JSON"** — the browser is running a stale page from before the plugin was updated. Hard-refresh (`Ctrl+Shift+R`) or open a new tab after restarting the web server.
-- **`—` stars / Unknown maintenance** — GitHub API rate limit; configure a token (above) or wait for the hourly reset (the background loop fills in automatically).
-- **Network to GitHub failing** — the plugin uses public mirrors; if you have a local proxy (e.g. Clash), set `HTTPS_PROXY`/`HTTP_PROXY`, and for git/gh: `git config --global http.https://github.com.proxy http://127.0.0.1:7890`.
-
-## Development
-
-- `lib/host.js` — Cordis host: the `/api/dsh-plugin-market` route, catalog + stats, install/update tasks, dsh CLI resolution.
-- `lib/client.js` — browser client: the workshop UI, filter bar, settings modal, restart toast.
-- `data/plugins.json` — the catalog (edit me to curate).
-- `scripts/seed.mjs` — rebuild the catalog from the upstream awesome list, top-N per category by stars (`node scripts/seed.mjs --top 10`).
-- `scripts/validate.mjs` — catalog linter (used by the PR workflow).
-- `scripts/prewarm.mjs` — smoke test + live stats warm-up.
-
-## License
-
-MIT · installing a plugin downloads and runs third-party code — review the source and install at your own risk.
+```sh
+cd dsh-plugin-market
+npm login --registry=https://registry.npmjs.org   # once, with your npm account (your default registry is a CN mirror)
+npm publish --registry=https://registry.npmjs.org after that, anyone can: dsh plugin --profile web add @cyber-moshen/dsh-plugin-market
+```
