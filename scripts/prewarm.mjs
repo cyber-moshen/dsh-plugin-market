@@ -34,8 +34,8 @@ function call(method, body) {
   })
 }
 
-const probe = await call('probe', {})
-console.log('[smoke] probe:', probe.slice(0, 500))
+const notice = await call('notice', {})
+console.log('[smoke] notice:', notice.slice(0, 200))
 
 const cfg = await call('config', {})
 console.log('[smoke] config:', cfg.slice(0, 200))

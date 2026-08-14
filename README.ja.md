@@ -1,0 +1,118 @@
+# dsh-plugin-market
+
+[DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) Web GUI 向けの**プラグイン工房**——厳選されたプラグインカタログ。カタログ本体はこのリポジトリの中にあります。
+
+[English](README.md) · [中文](README.zh.md)
+
+## これは何
+
+**設定 → プラグイン工房**ページを提供します：
+
+- **カードグリッド**のコミュニティプラグイン一覧——各カードに**タグ**（クリックでそのタグを検索）、**GitHub スター**、**最終コミットの鮮度**（色付きメンテナンス表示）、**インストール済みバージョン/更新状態**を表示；
+- **名前・説明・作者・タグ横断の検索**に加え、常設の**フィルターバー**（インストール状態、スター/コミット並び替え、メンテナンス状態）；
+- **ワンクリックでインストール/更新**（実際の `dsh plugin` CLI をバックグラウンドで実行。環境の癖はすべて処理済み — 下記参照）；
+- 各カード右上の **GitHub アイコンボタン**でリポジトリへジャンプ；
+- **設定モーダル**：**言語切り替え（中文 / English / 日本語）**、**GitHub Token** 入力（API レート制限を回避）、**起動時自動更新**のトグル；
+- 起動時自動更新の完了後、任意のページ上部に **「プラグインを自動更新しました。再起動してください」** のトーストを表示。
+
+**カタログはこのリポジトリの `data/plugins.json`**——誰でも Pull Request を出すだけでプラグインを追加できます（[PR の出し方](#pull-request-でプラグインを追加する)を参照）。プラグインは実行時にここから取得（ミラーチェーン経由）し、オフライン時は同梱スナップショットを使います。
+
+## インストール
+
+```sh
+# このリポジトリのチェックアウトがあるディレクトリから：
+dsh plugin --profile web add ./dsh-plugin-market -w
+# Web サーバーを再起動し、設定 → プラグイン工房 を開く
+```
+
+## 使い方
+
+### 工房ページ
+
+1. **設定 → プラグイン工房**を開きます。
+2. **検索**——キーワードを入力すると、プラグイン名・説明・作者**・タグ**を横断検索します。カード上の `#タグ` をクリックするとそのタグで検索します。
+3. **フィルターバー**（検索ボックスの下に常設）：
+   - インストール状態：すべて / インストール済み / 未インストール
+   - 並び順：スター昇順 / スター降順 / コミット昇順 / コミット降順
+   - メンテナンス：すべて / 活発 / やや古い / 放置の可能性 / 不明
+4. **カード操作**：
+   - ⭐ スターと 🕓 最終コミットは GitHub API から取得（[データとレート制限](#データとレート制限)参照）。メンテナンス色：緑=3ヶ月以内に更新、黄=1年以内、赤=それ以上前またはアーカイブ。
+   - **未インストール** → `インストール` ボタン。
+   - **インストール済みで新バージョンあり** → `インストール済み vX` + `更新 → vY` ボタン。
+   - **インストール済みで最新** → `インストール済み vX` の表示のみ（ボタンなし。アンインストールは標準のプラグイン一覧/CLI から）。
+   - 右上の GitHub アイコンでリポジトリページを開きます。
+
+### 設定モーダル（検索ボックスの右の「設定」ボタン）
+
+- **言語**——中文 / English / 日本語。工房ページはこの選択に従います（アプリの他部分はシステム言語に従います）。
+- **GitHub Token（任意）**——トークンを貼り付けると API レート制限が毎時 60 回から 5000 回に上がります。[トークンの取得方法](#github-token-の取得方法)を参照。環境変数 `GITHUB_TOKEN` / `GH_TOKEN` が優先されます。
+- **起動時にインストール済みプラグインを自動更新**——有効にすると、Web サーバー起動後にインストール済みプラグインを確認し、新バージョンがあれば自動更新します。完了後、ホームページのトーストで再起動を促します。
+
+## GitHub Token の取得方法
+
+1. <https://github.com/settings/tokens> を開きます（Settings → Developer settings → Personal access tokens）。
+2. **Generate new token (classic)** をクリック。
+3. 名前（例：`dsh-plugin-market`）と有効期限を設定。
+4. **`repo`** スコープにチェック（このプラグインに必要なのはこれだけです）。
+5. **Generate token** をクリックし、**その場でコピー**（一度しか表示されません）。
+6. 工房の**設定**モーダルに貼り付けて**保存**。保存されると ✓ が表示されます。
+
+> トークンはリポジトリへの書き込み権限です。厳重に保管してください。
+
+## Pull Request でプラグインを追加する
+
+カタログは単一の JSON ファイル：[`data/plugins.json`](data/plugins.json)。
+
+1. このリポジトリの GitHub ページで `data/plugins.json` を開く。
+2. 鉛筆（**Edit**）ボタンをクリック。
+3. 既存エントリをコピーして自分のプラグインに書き換え、`"plugins": [...]` の対応する `category` の下に挿入。`"count"` も同期させる。
+4. **Commit changes… → Propose changes → Create pull request**。
+
+PR ごとに検証ワークフローが走り、JSON の形式エラーや必須フィールド欠落は赤くなります（ローカルでは `node scripts/validate.mjs data/plugins.json` で確認可）。
+
+エントリの形：
+
+```jsonc
+{
+  "name": "your-plugin-name",                 // 表示名（一意）
+  "owner": "your-github-username",
+  "url": "https://github.com/you/your-plugin",// github.com の URL
+  "category": "tools",                        // ui | theme | session | memory | tools | skill | workflow | notify | model | dev | fun
+  "tags": ["ツール強化", "自動化"],             // 0-5 個の検索可能タグ（例：記憶強化 / UI美化）
+  "description": { "en": "...", "zh": "..." },// 各1行
+  "npm": null,                                // npm 公開済みならパッケージ名、それ以外は null
+  "install": "dsh plugin --profile web add github:you/your-plugin",
+  "added": "2026-01-01"
+}
+```
+
+カテゴリが足りない？ファイル冒頭の `categories` に追加すれば、UI のフィルターにも自動で現れます。
+
+## データとレート制限
+
+- **カタログ**——このリポジトリの `data/plugins.json`。実行時にミラーチェーン（ghproxy → gh-proxy → ghfast → raw.githubusercontent → github.com/raw）で取得。リポジトリに到達できない場合は同梱スナップショットを使用。
+- **スター / 最終コミット**——GitHub API、ディスクに 24 時間キャッシュ（`$DSH_HOME/.dsh-plugin-market-cache.json`）、バックグラウンドで補充。トークンなしの匿名制限は**毎時 60 回**。使い切ると shields.io バッジにフォールバック（スターは取得できることが多いが、last-commit バッジは不安定なため「—」表示になることがあります。クォータがリセットされるかトークンを設定すると自動で補完されます）。
+- **バージョン**——npm 公開プラグインは npm registry、それ以外はリポジトリの `package.json`（API クォータは消費しません）。
+
+## なぜこのインストールフラグ？
+
+profile は pnpm ワークスペースのルートなので、pnpm 呼び出しには必ず `-w` を付けます。また npm 上のいくつかの `@deepseek-ai` peer パッケージは `latest` タグが壊れており（0.0.1-rc.1 は未公開の `@deepseek-ai/dsh-compact` に依存）、インストール時は標準 peer（`@deepseek-ai/cordis`、`dsh-client-runtime`、`dsh-client-ui-slots`、`react`）を profile 内の既存バージョンに固定します。完全アプリ型プラグイン（TUI クライアント等）は web profile へのインストールを拒否します（api-gateway 競合保護）。
+
+## トラブルシューティング
+
+- **「not found is not valid JSON」エラー**——ブラウザがプラグイン更新前の古いページを表示しています。Web サーバー再起動後、**強制リフレッシュ（Ctrl+Shift+R）**または新しいタブで開いてください。
+- **スターが「—」/ メンテナンスが「不明」**——GitHub API のレート制限です。トークンを設定するか、毎時のリセットを待ちます（バックグラウンドで自動補完されます）。
+- **GitHub に接続できない**——プラグインは公開ミラーを使用。ローカルプロキシ（Clash 等）がある場合は `HTTPS_PROXY`/`HTTP_PROXY` を設定し、git/gh には `git config --global http.https://github.com.proxy http://127.0.0.1:7890` を追加してください。
+
+## 開発
+
+- `lib/host.js`——Cordis host：`/api/dsh-plugin-market` ルート、カタログと統計、インストール/更新タスク、dsh CLI の解決。
+- `lib/client.js`——ブラウザ側：工房 UI、フィルターバー、設定モーダル、再起動トースト。
+- `data/plugins.json`——カタログ（編集して厳選を調整）。
+- `scripts/seed.mjs`——上流の awesome リストからカタログを再構築（カテゴリごとにスター数上位 N 件、`node scripts/seed.mjs --top 10`）。
+- `scripts/validate.mjs`——カタログ検証（PR ワークフローで使用）。
+- `scripts/prewarm.mjs`——スモークテスト＋統計キャッシュの事前投入。
+
+## ライセンス
+
+MIT · プラグインのインストールはサードパーティコードのダウンロードと実行を意味します。ソースを確認の上、自己責任でインストールしてください。
