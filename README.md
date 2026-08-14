@@ -12,7 +12,8 @@ A **Settings → Plugin Workshop (插件工坊)** page with:
 - **search across names, descriptions, authors and tags**, plus an always-visible filter bar (installed state, sort by stars/commit, maintenance state);
 - **one-click install / update** (runs the real `dsh plugin` CLI in the background, with all environment quirks handled — see below);
 - a **GitHub icon button** on every card jumping straight to the repo;
-- a **settings modal** with a **language switch (中文 / English / 日本語)**, a **GitHub Token** field (lifts API rate limits) and a **startup auto-update** toggle;
+- a **settings modal** with a **GitHub Token** field (lifts API rate limits) and a **startup auto-update** toggle;
+- the **whole workshop follows the app's own language** (Settings → General → Language: 中文 / English);
 - a frame-wide **"plugins auto-updated — restart to apply"** toast after a boot-time auto-update.
 
 **The catalog is this repo's own `data/plugins.json`** — anyone can add a plugin by opening a pull request (see [Contributing](#submitting-a-pr-to-add-your-plugin)). The plugin fetches it from here at runtime (mirror chain), with the bundled copy as an offline snapshot.
@@ -44,7 +45,7 @@ dsh plugin --profile web add ./dsh-plugin-market -w
 
 ### Settings modal (the `Settings` button next to the search box)
 
-- **Language** — 中文 / English / 日本語. The workshop page follows this choice; the rest of the app follows the system language.
+- **Language** — the workshop follows the app's own setting (Settings → General → Language; 中文 / English). No separate switch needed.
 - **GitHub Token (optional)** — paste a token to raise the API rate limit from 60 requests/hour to 5000/hour. See [How to get a token](#how-to-get-a-github-token). The `GITHUB_TOKEN` / `GH_TOKEN` environment variables take precedence.
 - **Auto-update installed plugins on startup** — when enabled, the web server checks installed plugins after boot and updates any with newer versions; once done, a toast on the home page asks you to restart the web server to apply.
 
