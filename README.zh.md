@@ -46,7 +46,7 @@ dsh plugin --profile web add ./dsh-plugin-market -w
    - 维护：全部 / 活跃 / 较久未更新 / 可能停更 / 未知
 4. **卡片操作**：
    - ⭐ 星标、🕓 最近提交**实时**来自 GitHub API；维护色标：绿=3 个月内推送，黄=1 年内，红=更久或已归档。
-   - **未安装** → `安装` 按钮（默认走 GitHub 链接安装；有 npm 包的走 npm 安装）。
+   - **未安装** → `安装` 按钮（一律通过 npm 包安装）。
    - **已安装且有新版** → `已安装 vX` + `更新 → vY`。
    - **已安装且最新** → 只显示 `已安装 vX`。
    - 右上角 GitHub 图标打开仓库页面。
@@ -84,18 +84,10 @@ dsh plugin --profile web add ./dsh-plugin-market -w
 {
   "url": "https://github.com/you/your-plugin",  // 你的仓库链接（必填、唯一）
   "tags": ["记忆增强", "UI美化"],                 // 0-5 个可搜索标签（可选）
-  "npm": "your-npm-package"                     // 有 npm 包才写（可选：npm 一键安装 + 版本检测）
+  "npm": "your-npm-package"                     // 必填——安装/更新一律通过 npm 包
 }
 ```
 
-卡片上的名字、作者、安装命令、星标/提交时间都会自动从 `url` 推导。只有发布到 npm 的插件才需要 `npm` 字段——不填也能通过 GitHub 链接正常安装。
+卡片上的名字、作者、星标/提交时间都会自动从 `url` 推导；**`npm` 必填**——安装和更新都走 npm 包（不使用 GitHub 安装）。
 
 详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
-
-## 把这个插件发布到 npm
-
-```sh
-cd dsh-plugin-market
-npm login --registry=https://registry.npmjs.org   # 首次，用你的 npm 账号（默认 registry 是镜像，必须指定官方源）
-npm publish --registry=https://registry.npmjs.org # 之后任何人可：dsh plugin --profile web add @cyber-moshen/dsh-plugin-market
-```

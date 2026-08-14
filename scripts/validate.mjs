@@ -1,5 +1,5 @@
 // Catalog linter for PR validation (zero dependencies).
-// The schema is intentionally minimal: url + tags (+ optional npm).
+// Schema: url + tags + npm (npm is mandatory — install/update go through it).
 // Usage: node scripts/validate.mjs [path/to/plugins.json]
 import { readFileSync } from 'node:fs'
 
@@ -35,8 +35,8 @@ for (const [i, p] of (root.plugins || []).entries()) {
       }
     }
   }
-  if (p.npm !== undefined && p.npm !== null && (typeof p.npm !== 'string' || !p.npm.trim())) {
-    errors.push(at + '.npm must be a non-empty string or null')
+  if (typeof p.npm !== 'string' || !p.npm.trim()) {
+    errors.push(at + '.npm is required (a non-empty npm package name — install/update go through npm)')
   }
 }
 

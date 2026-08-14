@@ -46,7 +46,7 @@ Web サーバーを再起動し、**設定 → プラグイン工房** を開き
    - メンテナンス：すべて / 活発 / やや古い / 放置の可能性 / 不明
 4. **カード操作**：
    - ⭐ スターと 🕓 最終コミットは GitHub API から**リアルタイム**取得。メンテナンス色：緑=3ヶ月以内に更新、黄=1年以内、赤=それ以上前またはアーカイブ。
-   - **未インストール** → `インストール` ボタン（GitHub URL からインストール。npm 公開済みなら npm 経由）。
+   - **未インストール** → `インストール` ボタン（npm パッケージ経由でインストール）。
    - **インストール済みで新バージョンあり** → `インストール済み vX` + `更新 → vY`。
    - **インストール済みで最新** → `インストール済み vX` の表示のみ。
    - 右上の GitHub アイコンでリポジトリページを開きます。
@@ -84,18 +84,10 @@ PR ごとに検証ワークフローが走り、JSON の形式エラーや必須
 {
   "url": "https://github.com/you/your-plugin",  // リポジトリ URL（必須・一意）
   "tags": ["記憶強化", "UI美化"],                // 0-5 個の検索可能タグ（任意）
-  "npm": "your-npm-package"                     // npm 公開時のみ（任意：ワンクリック導入＋バージョン検出）
+  "npm": "your-npm-package"                     // 必須——インストール/更新は npm 経由のみ
 }
 ```
 
-カードの表示名・作者・インストールコマンド・スター/最終コミットはすべて `url` から自動導出されます。`npm` は npm 公開プラグインのみ必要です——未記入でも GitHub URL から問題なくインストールできます。
+カードの表示名・作者・スター/最終コミットはすべて `url` から自動導出されます。**`npm` は必須**です——インストールと更新は npm パッケージ経由で行われます（GitHub インストールは使用しません）。
 
 詳細は [CONTRIBUTING.md](CONTRIBUTING.md) を参照。
-
-## このプラグインを npm に公開する
-
-```sh
-cd dsh-plugin-market
-npm login --registry=https://registry.npmjs.org   # 初回のみ（既定のregistryはミラーのため公式を明示）
-npm publish --registry=https://registry.npmjs.org # 以後は誰でも：dsh plugin --profile web add @cyber-moshen/dsh-plugin-market
-```

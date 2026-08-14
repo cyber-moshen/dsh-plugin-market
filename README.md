@@ -46,7 +46,7 @@ Restart the web server, then open **Settings → Plugin Workshop**.
    - Maintenance — All / Active / Stale / Unmaintained / Unknown
 4. **Card actions**:
    - ⭐ Stars and 🕓 last commit are fetched live from the GitHub API; the maintenance tile is colored: green = pushed within 3 months, amber = within a year, red = older / archived.
-   - **Not installed** → `Install` button (installs from the GitHub URL, or the npm package when one is published).
+   - **Not installed** → `Install` button (installs via the npm package).
    - **Installed, newer version available** → `Installed vX` + `Update → vY`.
    - **Installed, current** → just `Installed vX`.
    - The GitHub icon (top-right) opens the repo page.
@@ -84,18 +84,10 @@ Entry shape (keep it simple — everything else is derived from the URL):
 {
   "url": "https://github.com/you/your-plugin",  // your repo URL (required, unique)
   "tags": ["记忆增强", "UI美化"],                 // 0-5 searchable tags (optional)
-  "npm": "your-npm-package"                     // npm name if published (optional: one-click install via npm + version checks)
+  "npm": "your-npm-package"                     // required — install/update go through the npm package
 }
 ```
 
-The card name, author, install command and stats are all derived from `url`. The `npm` field is only needed when the plugin is published to npm — without it, installation still works via the GitHub URL.
+The card name, author and stats are all derived from `url`; **`npm` is required** — installation and updates go through the npm package (GitHub installs are not used).
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
-
-## Publishing this plugin to npm
-
-```sh
-cd dsh-plugin-market
-npm login --registry=https://registry.npmjs.org   # once, with your npm account (your default registry is a CN mirror)
-npm publish --registry=https://registry.npmjs.org # after that, anyone can: dsh plugin --profile web add @cyber-moshen/dsh-plugin-market
-```

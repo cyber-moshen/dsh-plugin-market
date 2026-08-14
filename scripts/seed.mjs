@@ -75,6 +75,8 @@ const CATEGORY_TAGS = {
 
 const groups = new Map()
 for (const p of plugins) {
+  // npm is mandatory: install/update go through the npm package only.
+  if (!p.npm) continue
   const cat = p.category || 'other'
   if (!groups.has(cat)) groups.set(cat, [])
   groups.get(cat).push(p)
@@ -111,12 +113,13 @@ const result = {
   name: 'dsh-plugin-market',
   url: 'https://github.com/cyber-moshen/dsh-plugin-market',
   updated: new Date().toISOString().slice(0, 10),
-  // Minimal schema: url (GitHub link) + tags, plus npm when published.
-  plugins: ordered.map((p) => {
-    const entry = { url: p.url, tags: p.tags && p.tags.length ? p.tags : undefined }
-    if (p.npm) entry.npm = p.npm
-    return entry
-  }),
+  // Minimal schema: url (GitHub link) + tags + npm (mandatory — the install
+  // and update channel is the npm package).
+  plugins: ordered.map((p) => ({
+    url: p.url,
+    tags: p.tags && p.tags.length ? p.tags : undefined,
+    npm: p.npm,
+  })),
 }
 
 mkdirSync(dirname(out), { recursive: true })
