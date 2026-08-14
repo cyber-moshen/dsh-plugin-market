@@ -1,63 +1,101 @@
- @cyber-moshen/dsh-plugin-market
+# @cyber-moshen/dsh-plugin-market
 
-[DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) Web GUI 鐨?*鎻掍欢宸ュ潑**鈥斺€斾竴涓簿蹇冪瓫閫夌殑鎻掍欢鐩綍锛岀洰褰曟湰韬氨鍦ㄦ湰浠撳簱閲屻€?
-[English](README.md) 路 [鏃ユ湰瑾瀅(README.ja.md)
+[DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) Web GUI 的**插件工坊**——一个精心筛选的插件目录，目录本身就在本仓库里。
 
-## 杩欐槸浠€涔?
-**璁剧疆 鈫?鎻掍欢宸ュ潑**椤甸潰锛屾彁渚涳細
+[English](README.md) · [日本語](README.ja.md)
 
-- **鍗＄墖寮忔彃浠跺垪琛?*鈥斺€旀瘡寮犲崱鐗囨樉绀?*鏍囩**锛堢偣鏍囩鍗冲彲鎼滅储锛夈€?*GitHub 鏄熸爣**銆?*鏈€杩戞彁浜ゆ椂闂?*锛堝甫棰滆壊缁存姢淇″彿锛夈€?*宸插畨瑁呯増鏈?鏇存柊鐘舵€?*锛?- **鎼滅储**鍖归厤鎻掍欢鍚嶃€佷綔鑰?*鍜屾爣绛?*锛涘父椹?*杩囨护鏍?*锛堝畨瑁呯姸鎬併€佹槦鏍?鎻愪氦鎺掑簭銆佺淮鎶ょ姸鎬侊級锛?- **涓€閿畨瑁?/ 鏇存柊**锛堝悗鍙拌皟鐢ㄧ湡瀹?`dsh plugin` CLI锛夛紱
-- 姣忓紶鍗＄墖鍙充笂瑙掔殑 **GitHub 鍥炬爣鎸夐挳**鐩磋揪浠撳簱锛?- **璁剧疆寮圭獥**锛?*GitHub Token** 杈撳叆锛堣В闄?API 闄愭祦锛夈€?*鍚姩鏃惰嚜鍔ㄦ洿鏂?*寮€鍏筹紱
-- **鏁翠釜鎻掍欢璺熼殢搴旂敤鑷韩鐨勮瑷€璁剧疆**锛堣缃?鈫?閫氱敤 鈫?璇█锛氫腑鏂?/ English锛夛紱
-- 鍚姩鏃惰嚜鍔ㄦ洿鏂板畬鎴愬悗锛屼换鎰忛〉闈㈤《閮ㄥ脊鍑?**"宸茶嚜鍔ㄦ洿鏂版彃浠讹紝璇烽噸鍚敓鏁?** 鎻愮ず鏉°€?
-**鐩綍灏辨槸鏈粨搴撶殑 `data/plugins.json`**鈥斺€斾换浣曚汉鎯充笂鏋舵彃浠讹紝鎻愪竴涓?PR 鍗冲彲锛堣[鎻愪氦 PR 涓婃灦](#鎻愪氦-pr-涓婃灦浣犵殑鎻掍欢)锛夈€傝繍琛屾椂**瀹炴椂**鎶撳彇锛?*娌℃湁绂荤嚎缂撳瓨鍜屽揩鐓?*銆?
-## 瀹夎
+## 这是什么
 
-鍙戝竷鍒?npm 鍚庯紝涓€鏉″懡浠や换鎰忎綅缃畨瑁咃細
+**设置 → 插件工坊**页面，提供：
+
+- **卡片式插件列表**——每张卡片显示**标签**（点标签即可搜索）、**GitHub 星标**、**最近提交时间**（带颜色维护信号）、**已安装版本/更新状态**；
+- **搜索**匹配插件名、作者**和标签**；常驻**过滤栏**（安装状态、星标/提交排序、维护状态）；
+- **一键安装 / 更新**（后台调用真实 `dsh plugin` CLI）；
+- 每张卡片右上角的 **GitHub 图标按钮**直达仓库；
+- **设置弹窗**：**GitHub Token** 输入（解除 API 限流）、**启动时自动更新**开关；
+- **整个插件跟随应用自身的语言设置**（设置 → 通用 → 语言：中文 / English）；
+- 启动时自动更新完成后，任意页面顶部弹出 **"已自动更新插件，请重启生效"** 提示条。
+
+**目录就是本仓库的 `data/plugins.json`**——任何人想上架插件，提一个 PR 即可（见[提交 PR 上架](#提交-pr-上架你的插件)）。运行时**实时**抓取，**没有离线缓存和快照**。
+
+## 安装
+
+发布到 npm 后，一条命令任意位置安装：
 
 ```sh
 dsh plugin --profile web add @cyber-moshen/dsh-plugin-market
 ```
 
-鏈湴婧愮爜瀹夎锛?
+本地源码安装：
+
 ```sh
 dsh plugin --profile web add ./dsh-plugin-market -w
 ```
 
-閲嶅惎 Web 鏈嶅姟锛岀劧鍚庢墦寮€ **璁剧疆 鈫?鎻掍欢宸ュ潑**銆?
-## 浣跨敤鏁欏
+重启 Web 服务，然后打开 **设置 → 插件工坊**。
 
-### 宸ュ潑椤甸潰
+## 使用教学
 
-1. 鎵撳紑 **璁剧疆 鈫?鎻掍欢宸ュ潑**銆?2. **鎼滅储**鈥斺€斿尮閰嶆彃浠跺悕銆佷綔鑰?*鍜屾爣绛?*锛涚偣鍑诲崱鐗囦笂鐨?`#鏍囩` 鐩存帴鎼滅储璇ユ爣绛俱€?3. **杩囨护鏍?*锛堟悳绱㈡涓嬫柟甯搁┗锛夛細
-   - 瀹夎鐘舵€侊細鍏ㄩ儴 / 宸插畨瑁?/ 鏈畨瑁?   - 鎺掑簭锛氭槦鏍囧崌搴?/ 鏄熸爣闄嶅簭 / 鎻愪氦鍗囧簭 / 鎻愪氦闄嶅簭
-   - 缁存姢锛氬叏閮?/ 娲昏穬 / 杈冧箙鏈洿鏂?/ 鍙兘鍋滄洿 / 鏈煡
-4. **鍗＄墖鎿嶄綔**锛?   - 猸?鏄熸爣銆侌煏?鏈€杩戞彁浜?*瀹炴椂**鏉ヨ嚜 GitHub API锛涚淮鎶よ壊鏍囷細缁?3 涓湀鍐呮帹閫侊紝榛?1 骞村唴锛岀孩=鏇翠箙鎴栧凡褰掓。銆?   - **鏈畨瑁?* 鈫?`瀹夎` 鎸夐挳锛堥粯璁よ蛋 GitHub 閾炬帴瀹夎锛涙湁 npm 鍖呯殑璧?npm 瀹夎锛夈€?   - **宸插畨瑁呬笖鏈夋柊鐗?* 鈫?`宸插畨瑁?vX` + `鏇存柊 鈫?vY`銆?   - **宸插畨瑁呬笖鏈€鏂?* 鈫?鍙樉绀?`宸插畨瑁?vX`銆?   - 鍙充笂瑙?GitHub 鍥炬爣鎵撳紑浠撳簱椤甸潰銆?
-### 璁剧疆寮圭獥锛堟悳绱㈡鍙充晶"璁剧疆"鎸夐挳锛?
-- **GitHub Token锛堝彲閫夛級**鈥斺€斿～鍏ヤ护鐗屾妸 API 闄愭祦浠庢瘡灏忔椂 60 娆℃彁鍗囧埌 5000 娆°€傝幏鍙栨柟娉曡[濡備綍鑾峰彇 Token](#濡備綍鑾峰彇-github-token)銆傜幆澧冨彉閲?`GITHUB_TOKEN` / `GH_TOKEN` 浼樺厛銆傜┖杈撳叆淇濆瓨涓嶄細娓呯┖宸插瓨 Token锛涙竻闄よ鐢?娓呴櫎"鎸夐挳銆?- **鍚姩鏃惰嚜鍔ㄦ洿鏂板凡瀹夎鎻掍欢**鈥斺€斿紑鍚悗锛屾瘡娆?Web 鏈嶅姟鍚姩浼氭鏌ュ凡瀹夎鎻掍欢锛屾湁鏂扮増鑷姩鏇存柊锛涘畬鎴愬悗棣栭〉寮圭獥鎻愮ず閲嶅惎鐢熸晥銆?
-## 濡備綍鑾峰彇 GitHub Token
+### 工坊页面
 
-1. 鎵撳紑 <https://github.com/settings/tokens>锛圫ettings 鈫?Developer settings 鈫?Personal access tokens锛夈€?2. 鐐瑰嚮 **Generate new token (classic)**銆?3. 璧蜂釜鍚嶅瓧锛堝 `dsh-plugin-market`锛夛紝璁剧疆鏈夋晥鏈熴€?4. 鍕鹃€?**`repo`** 鏉冮檺锛堟湰鎻掍欢鍙渶瑕佽繖涓€涓級銆?5. 鐐?**Generate token**锛?*绔嬪嵆澶嶅埗**锛堝彧鏄剧ず涓€娆★級銆?6. 绮樿创鍒版彃浠跺伐鍧婄殑**璁剧疆**寮圭獥锛岀偣**淇濆瓨**锛涗繚瀛樻垚鍔熷悗浼氭樉绀?`鉁?Token 宸蹭繚瀛橈紙路路路xxxx锛塦銆?
-> 浠ょ墝绛変簬浣犱粨搴撶殑鍐欐潈闄愶紝璇峰Ε鍠勪繚绠★紝涓嶈澶栨硠銆?
-## 鎻愪氦 PR 涓婃灦浣犵殑鎻掍欢
+1. 打开 **设置 → 插件工坊**。
+2. **搜索**——匹配插件名、作者**和标签**；点击卡片上的 `#标签` 直接搜索该标签。
+3. **过滤栏**（搜索框下方常驻）：
+   - 安装状态：全部 / 已安装 / 未安装
+   - 排序：星标升序 / 星标降序 / 提交升序 / 提交降序
+   - 维护：全部 / 活跃 / 较久未更新 / 可能停更 / 未知
+4. **卡片操作**：
+   - ⭐ 星标、🕓 最近提交**实时**来自 GitHub API；维护色标：绿=3 个月内推送，黄=1 年内，红=更久或已归档。
+   - **未安装** → `安装` 按钮（默认走 GitHub 链接安装；有 npm 包的走 npm 安装）。
+   - **已安装且有新版** → `已安装 vX` + `更新 → vY`。
+   - **已安装且最新** → 只显示 `已安装 vX`。
+   - 右上角 GitHub 图标打开仓库页面。
 
-鐩綍鏄竴涓?JSON 鏂囦欢锛歔`data/plugins.json`](data/plugins.json)銆?
-1. 鍦ㄦ湰浠撳簱 GitHub 椤甸潰涓婃墦寮€ `data/plugins.json`銆?2. 鐐归搮绗旓紙**Edit**锛夋寜閽€?3. 澶嶅埗涓€鏉＄幇鏈夋潯鐩敼鎴愪綘鐨勬彃浠讹紝鎻掑叆鍒?`"plugins": [...]` 閲屻€?4. **Commit changes鈥?鈫?Propose changes 鈫?Create pull request**銆?
-姣忎釜 PR 浼氳嚜鍔ㄨ窇鏍￠獙锛孞SON 鏍煎紡閿欒鎴栫己瀛楁浼氭爣绾紙鏈湴鍙厛璺?`node scripts/validate.mjs data/plugins.json`锛夈€?
-鏉＄洰缁撴瀯锛堣秺绠€鍗曡秺濂斤紝鍏朵綑鍏ㄩ儴浠庨摼鎺ヨ嚜鍔ㄦ帹瀵硷級锛?
+### 设置弹窗（搜索框右侧"设置"按钮）
+
+- **GitHub Token（可选）**——填入令牌把 API 限流从每小时 60 次提升到 5000 次。获取方法见[如何获取 Token](#如何获取-github-token)。环境变量 `GITHUB_TOKEN` / `GH_TOKEN` 优先。空输入保存不会清空已存 Token；清除请用"清除"按钮。
+- **启动时自动更新已安装插件**——开启后，每次 Web 服务启动会检查已安装插件，有新版自动更新；完成后首页弹窗提示重启生效。
+
+## 如何获取 GitHub Token
+
+1. 打开 <https://github.com/settings/tokens>（Settings → Developer settings → Personal access tokens）。
+2. 点击 **Generate new token (classic)**。
+3. 起个名字（如 `dsh-plugin-market`），设置有效期。
+4. 勾选 **`repo`** 权限（本插件只需要这一个）。
+5. 点 **Generate token**，**立即复制**（只显示一次）。
+6. 粘贴到插件工坊的**设置**弹窗，点**保存**；保存成功后会显示 `✓ Token 已保存（···xxxx）`。
+
+> 令牌等于你仓库的写权限，请妥善保管，不要外泄。
+
+## 提交 PR 上架你的插件
+
+目录是一个 JSON 文件：[`data/plugins.json`](data/plugins.json)。
+
+1. 在本仓库 GitHub 页面上打开 `data/plugins.json`。
+2. 点铅笔（**Edit**）按钮。
+3. 复制一条现有条目改成你的插件，插入到 `"plugins": [...]` 里。
+4. **Commit changes… → Propose changes → Create pull request**。
+
+每个 PR 会自动跑校验，JSON 格式错误或缺字段会标红（本地可先跑 `node scripts/validate.mjs data/plugins.json`）。
+
+条目结构（越简单越好，其余全部从链接自动推导）：
+
 ```jsonc
 {
-  "url": "https://github.com/you/your-plugin",  // 浣犵殑浠撳簱閾炬帴锛堝繀濉€佸敮涓€锛?  "tags": ["璁板繂澧炲己", "UI缇庡寲"],                 // 0-5 涓彲鎼滅储鏍囩锛堝彲閫夛級
-  "npm": "your-npm-package"                     // 鏈?npm 鍖呮墠鍐欙紙鍙€夛細npm 涓€閿畨瑁?+ 鐗堟湰妫€娴嬶級
+  "url": "https://github.com/you/your-plugin",  // 你的仓库链接（必填、唯一）
+  "tags": ["记忆增强", "UI美化"],                 // 0-5 个可搜索标签（可选）
+  "npm": "your-npm-package"                     // 有 npm 包才写（可选：npm 一键安装 + 版本检测）
 }
 ```
 
-鍗＄墖涓婄殑鍚嶅瓧銆佷綔鑰呫€佸畨瑁呭懡浠ゃ€佹槦鏍?鎻愪氦鏃堕棿閮戒細鑷姩浠?`url` 鎺ㄥ銆傚彧鏈夊彂甯冨埌 npm 鐨勬彃浠舵墠闇€瑕?`npm` 瀛楁鈥斺€斾笉濉篃鑳介€氳繃 GitHub 閾炬帴姝ｅ父瀹夎銆?
-璇﹁ [CONTRIBUTING.md](CONTRIBUTING.md)銆?
-## 鎶婅繖涓彃浠跺彂甯冨埌 npm
+卡片上的名字、作者、安装命令、星标/提交时间都会自动从 `url` 推导。只有发布到 npm 的插件才需要 `npm` 字段——不填也能通过 GitHub 链接正常安装。
+
+详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+## 把这个插件发布到 npm
 
 ```sh
 cd dsh-plugin-market
-npm login        # 棣栨锛岀敤浣犵殑 npm 璐﹀彿
-npm publish --registry=https://registry.npmjs.org 涔嬪悗浠讳綍浜哄彲锛歞sh plugin --profile web add @cyber-moshen/dsh-plugin-market
+npm login --registry=https://registry.npmjs.org   # 首次，用你的 npm 账号（默认 registry 是镜像，必须指定官方源）
+npm publish --registry=https://registry.npmjs.org # 之后任何人可：dsh plugin --profile web add @cyber-moshen/dsh-plugin-market
 ```
