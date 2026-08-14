@@ -9,7 +9,7 @@
 **設定 → プラグイン工房**ページを提供します：
 
 - **カードグリッド**のコミュニティプラグイン一覧——各カードに**タグ**（クリックでそのタグを検索）、**GitHub スター**、**最終コミットの鮮度**（色付きメンテナンス表示）、**インストール済みバージョン/更新状態**を表示；
-- **名前・説明・作者・タグ横断の検索**に加え、常設の**フィルターバー**（インストール状態、スター/コミット並び替え、メンテナンス状態）；
+- **名前・作者・タグ横断の検索**に加え、常設の**フィルターバー**（インストール状態、スター/コミット並び替え、メンテナンス状態）；
 - **ワンクリックでインストール/更新**（実際の `dsh plugin` CLI をバックグラウンドで実行。環境の癖はすべて処理済み — 下記参照）；
 - 各カード右上の **GitHub アイコンボタン**でリポジトリへジャンプ；
 - **設定モーダル**：**GitHub Token** 入力（API レート制限を回避）、**起動時自動更新**のトグル；
@@ -66,33 +66,27 @@ dsh plugin --profile web add ./dsh-plugin-market -w
 
 1. このリポジトリの GitHub ページで `data/plugins.json` を開く。
 2. 鉛筆（**Edit**）ボタンをクリック。
-3. 既存エントリをコピーして自分のプラグインに書き換え、`"plugins": [...]` の対応する `category` の下に挿入。`"count"` も同期させる。
+3. 既存エントリをコピーして自分のプラグインに書き換え、`"plugins": [...]` に挿入。
 4. **Commit changes… → Propose changes → Create pull request**。
 
 PR ごとに検証ワークフローが走り、JSON の形式エラーや必須フィールド欠落は赤くなります（ローカルでは `node scripts/validate.mjs data/plugins.json` で確認可）。
 
-エントリの形：
+エントリの形（シンプルに——他の項目は URL から自動導出）：
 
 ```jsonc
 {
-  "name": "your-plugin-name",                 // 表示名（一意）
-  "owner": "your-github-username",
-  "url": "https://github.com/you/your-plugin",// github.com の URL
-  "category": "tools",                        // ui | theme | session | memory | tools | skill | workflow | notify | model | dev | fun
-  "tags": ["ツール強化", "自動化"],             // 0-5 個の検索可能タグ（例：記憶強化 / UI美化）
-  "description": { "en": "...", "zh": "..." },// 各1行
-  "npm": null,                                // npm 公開済みならパッケージ名、それ以外は null
-  "install": "dsh plugin --profile web add github:you/your-plugin",
-  "added": "2026-01-01"
+  "url": "https://github.com/you/your-plugin",  // リポジトリ URL（必須・一意）
+  "tags": ["記憶強化", "UI美化"],                // 0-5 個の検索可能タグ（任意）
+  "npm": "your-npm-package"                     // npm 公開時のみ（任意：ワンクリック導入＋バージョン検出）
 }
 ```
 
-カテゴリが足りない？ファイル冒頭の `categories` に追加すれば、UI のフィルターにも自動で現れます。
+カードの表示名・作者・インストールコマンド・スター/最終コミットはすべて `url` から自動導出されます。`npm` は npm 公開プラグインのみ必要です。
 
 ## データとレート制限
 
-- **カタログ**——このリポジトリの `data/plugins.json`。実行時にミラーチェーン（ghproxy → gh-proxy → ghfast → raw.githubusercontent → github.com/raw）で取得。リポジトリに到達できない場合は同梱スナップショットを使用。
-- **スター / 最終コミット**——GitHub API、ディスクに 24 時間キャッシュ（`$DSH_HOME/.dsh-plugin-market-cache.json`）、バックグラウンドで補充。トークンなしの匿名制限は**毎時 60 回**。使い切ると shields.io バッジにフォールバック（スターは取得できることが多いが、last-commit バッジは不安定なため「—」表示になることがあります。クォータがリセットされるかトークンを設定すると自動で補完されます）。
+- **カタログ**——このリポジトリの `data/plugins.json`。実行時にミラーチェーン（ghproxy → gh-proxy → ghfast → raw.githubusercontent → github.com/raw）で**リアルタイム**取得。**オフラインスナップショットはありません**——ネットワーク断時は工房がエラーを表示し、古いデータは表示されません。
+- **スター / 最終コミット**——GitHub API から**リアルタイム**取得し、数分間メモリに保持（**ディスクには書きません**）。トークンなしの匿名制限は**毎時 60 回**。使い切ると shields.io バッジにフォールバック。工房の設定でトークンを設定すると毎時 5000 回に引き上がります。
 - **バージョン**——npm 公開プラグインは npm registry、それ以外はリポジトリの `package.json`（API クォータは消費しません）。
 
 ## なぜこのインストールフラグ？

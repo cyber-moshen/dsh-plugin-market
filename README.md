@@ -9,7 +9,7 @@
 A **Settings → Plugin Workshop (插件工坊)** page with:
 
 - a **card grid** of community plugins — each card shows **tags** (click a tag to search it), **GitHub stars**, **last-commit freshness** with a colored maintenance signal, and the **installed version / update state**;
-- **search across names, descriptions, authors and tags**, plus an always-visible filter bar (installed state, sort by stars/commit, maintenance state);
+- **search across names, authors and tags**, plus an always-visible filter bar (installed state, sort by stars/commit, maintenance state);
 - **one-click install / update** (runs the real `dsh plugin` CLI in the background, with all environment quirks handled — see below);
 - a **GitHub icon button** on every card jumping straight to the repo;
 - a **settings modal** with a **GitHub Token** field (lifts API rate limits) and a **startup auto-update** toggle;
@@ -66,33 +66,27 @@ The catalog is a single JSON file: [`data/plugins.json`](data/plugins.json).
 
 1. Open `data/plugins.json` in this repo on GitHub.
 2. Click the pencil (**Edit**) button.
-3. Copy an existing entry, change it to your plugin, insert it under the right `category` inside `"plugins": [...]`, and keep `"count"` in sync.
+3. Copy an existing entry, change it to your plugin, insert it inside `"plugins": [...]`.
 4. **Commit changes… → Propose changes → Create pull request.**
 
 A validation workflow runs on every PR and fails on malformed JSON or missing fields (you can run it locally with `node scripts/validate.mjs data/plugins.json`).
 
-Entry shape:
+Entry shape (keep it simple — everything else is derived from the URL):
 
 ```jsonc
 {
-  "name": "your-plugin-name",                 // display name (unique)
-  "owner": "your-github-username",
-  "url": "https://github.com/you/your-plugin",// github.com URL
-  "category": "tools",                        // ui | theme | session | memory | tools | skill | workflow | notify | model | dev | fun
-  "tags": ["工具增强", "自动化"],               // 0-5 searchable tags (e.g. 记忆增强 / UI美化)
-  "description": { "en": "...", "zh": "..." },// one line each
-  "npm": null,                                // npm package name if published, else null
-  "install": "dsh plugin --profile web add github:you/your-plugin",
-  "added": "2026-01-01"
+  "url": "https://github.com/you/your-plugin",  // your repo URL (required, unique)
+  "tags": ["记忆增强", "UI美化"],                 // 0-5 searchable tags (optional)
+  "npm": "your-npm-package"                     // npm name if published (optional: one-click install + version checks)
 }
 ```
 
-Missing a category? Add it to the `categories` map at the top of the file — the UI builds its filters from whatever is there.
+The card name, author, install command and stats (stars / last commit) are all derived from `url` automatically. `npm` is only needed for npm-published plugins.
 
 ## Data and rate limits
 
-- **Catalog** — this repo's `data/plugins.json`, fetched at runtime over a mirror chain (ghproxy → gh-proxy → ghfast → raw.githubusercontent → github.com/raw). If the repo is unreachable, the bundled snapshot is used.
-- **Stars / last commit** — the GitHub API, cached on disk for 24h (`$DSH_HOME/.dsh-plugin-market-cache.json`) and topped up in the background. Without a token the anonymous limit is **60 requests/hour**; when exhausted, shields.io badges are used as a fallback (stars usually work; the last-commit badge is unreliable, so some cards may show `—` until the API quota resets or a token is configured). Entries with shields-only data are automatically re-fetched from the API when available.
+- **Catalog** — this repo's `data/plugins.json`, fetched live at runtime over a mirror chain (ghproxy → gh-proxy → ghfast → raw.githubusercontent → github.com/raw). **No offline snapshot**: if the network is down, the workshop shows a fetch error instead of stale data.
+- **Stars / last commit** — fetched live from the GitHub API and held in memory for a few minutes (never written to disk). Without a token the anonymous limit is **60 requests/hour**; shields.io badges are used as a fallback when rate-limited. Configure a token in the workshop settings to lift the limit to 5000/hour.
 - **Versions** — npm registry for npm-published plugins, the repo's `package.json` otherwise (no API quota involved).
 
 ## Why the odd install flags?
@@ -112,7 +106,7 @@ Profiles are pnpm workspace roots, so every pnpm call passes `-w`. Several `@dee
 - `data/plugins.json` — the catalog (edit me to curate).
 - `scripts/seed.mjs` — rebuild the catalog from the upstream awesome list, top-N per category by stars (`node scripts/seed.mjs --top 10`).
 - `scripts/validate.mjs` — catalog linter (used by the PR workflow).
-- `scripts/prewarm.mjs` — smoke test + stats cache pre-fill.
+- `scripts/prewarm.mjs` — smoke test + live stats warm-up.
 
 ## License
 

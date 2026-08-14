@@ -8,56 +8,28 @@ use the GitHub web editor.
 
 1. Open [`data/plugins.json`](data/plugins.json) in this repo.
 2. Click the pencil (Edit) button.
-3. Copy one existing entry (the shape below), change it to your plugin, and
-   insert it under the right `category` inside the `"plugins": [...]` array.
+3. Copy one existing entry, change it to your plugin, and insert it inside the `"plugins": [...]` array.
 4. **Commit changes…** → **Propose changes** → **Create pull request**.
 
 A validation workflow runs automatically on the PR and fails if the JSON is
 malformed or an entry is missing required fields.
 
-## Entry shape
+## Entry shape (that's it — keep it simple)
 
 ```jsonc
 {
-  "name": "your-plugin-name",                      // display name
-  "owner": "your-github-username",                 // repo owner
-  "url": "https://github.com/you/your-plugin",     // repo URL (github.com)
-  "category": "tools",                             // one of: ui | theme | session | memory | tools | skill | workflow | notify | model | dev | fun
-  "tags": ["工具增强", "自动化"],                   // 1-5 searchable tags (optional; e.g. 记忆增强 / UI美化)
-  "description": {
-    "en": "One-line English description.",
-    "zh": "一句话中文描述。"
-  },
-  "npm": null,                                     // npm package name if published, else null
-  "install": "dsh plugin --profile web add github:you/your-plugin",   // the install command
-  "added": "2026-01-01"                            // date added (YYYY-MM-DD)
+  "url": "https://github.com/you/your-plugin",   // your repo URL (required, unique)
+  "tags": ["记忆增强", "UI美化"],                  // 0-5 searchable tags (optional)
+  "npm": "your-npm-package"                      // npm package name if published (optional, enables one-click install + version checks)
 }
 ```
 
-## Rules
+- `url` — the plugin's GitHub repo; the card name, author, install command and
+  stats (stars / last commit) are all derived from it automatically.
+- `tags` — what users would search for, e.g. `记忆增强`, `UI美化`, `自动化`, `多模型`.
+  Cards show every tag and the search box matches them.
+- `npm` — only if the plugin is published to npm: enables one-click install via
+  the npm package and npm-registry version/update detection. Omit it otherwise
+  (GitHub-source install is the default).
 
-- `name` must be unique in the file.
-- `url` must be a valid `https://github.com/<owner>/<repo>` (the plugin card's GitHub button and star lookup use it).
-- `tags` — at most 5 non-empty strings. Tags power the search box: searching a tag finds every plugin carrying it, even when the name/description don't contain the word. Choose what users would search for, e.g. `记忆增强`, `UI美化`, `自动化`, `多模型`.
-- `install` should be the official install command, `--profile <name>` included.
-- Keep `count` (root field) equal to the number of entries in `plugins`.
-- Run the linter locally if you can: `node scripts/validate.mjs data/plugins.json`.
-
-## Categories
-
-| id | meaning |
-|---|---|
-| `ui` | UI Enhancements |
-| `theme` | Themes & Appearance |
-| `session` | Sessions & Messages |
-| `memory` | Memory |
-| `tools` | Tools & Capabilities |
-| `skill` | Skills |
-| `workflow` | Workflow & Automation |
-| `notify` | Notifications & Integrations |
-| `model` | Models & Providers |
-| `dev` | Development & Runtime |
-| `fun` | Just for Fun |
-
-Missing a category? Add it to the `categories` map at the top of the JSON and
-use its id — the UI builds filter chips from whatever categories exist.
+Run the linter locally if you can: `node scripts/validate.mjs data/plugins.json`.

@@ -110,11 +110,13 @@ for (const e of ordered) {
 const result = {
   name: 'dsh-plugin-market',
   url: 'https://github.com/cyber-moshen/dsh-plugin-market',
-  source: 'https://github.com/cyber-moshen/dsh-plugin-market',
   updated: new Date().toISOString().slice(0, 10),
-  count: ordered.length,
-  categories,
-  plugins: ordered,
+  // Minimal schema: url (GitHub link) + tags, plus npm when published.
+  plugins: ordered.map((p) => {
+    const entry = { url: p.url, tags: p.tags && p.tags.length ? p.tags : undefined }
+    if (p.npm) entry.npm = p.npm
+    return entry
+  }),
 }
 
 mkdirSync(dirname(out), { recursive: true })
