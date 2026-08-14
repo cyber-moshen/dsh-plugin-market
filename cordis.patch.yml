@@ -1,0 +1,8 @@
+# dsh-plugin-market bundle patch: mounts the plugin market over the web
+# profile. Host half: /api/dsh-plugin-market route (catalog from this repo's
+# data/plugins.json + GitHub enrichment + install/uninstall ops). Client half:
+# card-grid "Plugin Market" tab under Settings → Plugins.
+
+- insert:
+    - id: dsh-plugin-market
+      name: 'dsh-plugin-market'
