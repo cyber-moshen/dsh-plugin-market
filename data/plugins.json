@@ -127,7 +127,7 @@
       "tags": [
         "工具增强"
       ],
-      "npm": "@dsh-external/dsh-vision-toolkit"
+      "npm": "@anionex/dsh-vision-toolkit"
     },
     {
       "url": "https://github.com/TonyDua/dsh-web-search-exa",
