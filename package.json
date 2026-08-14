@@ -5,6 +5,12 @@
   "type": "module",
   "main": "lib/host.js",
   "license": "MIT",
+  "scripts": {
+    "test": "node scripts/validate.mjs data/plugins.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "dsh",
     "dsh-plugin",
