@@ -12,8 +12,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      # No package-lock.json in this repo (installed via dsh/pnpm), so npm install.
-      - run: npm install
+      # Zero runtime dependencies (peerDependencies only), so no npm install:
+      # the test just validates data/plugins.json with plain Node.
       - run: npm test
 
   publish-npm:
@@ -25,9 +25,8 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
-      - run: npm install
-      # --access public is required for scoped packages; publishConfig.access
-      # in package.json makes it the default too.
+      # npm publish packs the `files` list directly; no install needed
+      # (installing would resolve the broken @deepseek-ai peers).
       - run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
