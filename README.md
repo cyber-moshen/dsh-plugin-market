@@ -49,7 +49,7 @@ Restart the web server, then open **Settings → Plugin Workshop**.
    - **Not installed** → `Install` button (installs via the npm package).
    - **Installed, newer version available** → `Installed vX` + `Update → vY`.
    - **Installed, current** → just `Installed vX`.
-   - Installed plugins also get **Enable / Disable** (applied via the profile patch layer; restart to apply) and **Uninstall** buttons next to `Update`.
+   - Installed plugins also get an **Uninstall** button next to `Update`.
    - The GitHub icon (top-right) opens the repo page.
 
 ### Settings modal (the `Settings` button next to the search box)
