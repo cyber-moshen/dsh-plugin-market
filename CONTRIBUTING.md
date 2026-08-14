@@ -22,7 +22,8 @@ malformed or an entry is missing required fields.
   "name": "your-plugin-name",                      // display name
   "owner": "your-github-username",                 // repo owner
   "url": "https://github.com/you/your-plugin",     // repo URL (github.com)
-  "category": "tools",                             // one of: ui | theme | session | memory | tools | workflow | notify | model | dev | fun
+  "category": "tools",                             // one of: ui | theme | session | memory | tools | skill | workflow | notify | model | dev | fun
+  "tags": ["工具增强", "自动化"],                   // 1-5 searchable tags (optional; e.g. 记忆增强 / UI美化)
   "description": {
     "en": "One-line English description.",
     "zh": "一句话中文描述。"
@@ -37,6 +38,7 @@ malformed or an entry is missing required fields.
 
 - `name` must be unique in the file.
 - `url` must be a valid `https://github.com/<owner>/<repo>` (the plugin card's GitHub button and star lookup use it).
+- `tags` — at most 5 non-empty strings. Tags power the search box: searching a tag finds every plugin carrying it, even when the name/description don't contain the word. Choose what users would search for, e.g. `记忆增强`, `UI美化`, `自动化`, `多模型`.
 - `install` should be the official install command, `--profile <name>` included.
 - Keep `count` (root field) equal to the number of entries in `plugins`.
 - Run the linter locally if you can: `node scripts/validate.mjs data/plugins.json`.
@@ -50,6 +52,7 @@ malformed or an entry is missing required fields.
 | `session` | Sessions & Messages |
 | `memory` | Memory |
 | `tools` | Tools & Capabilities |
+| `skill` | Skills |
 | `workflow` | Workflow & Automation |
 | `notify` | Notifications & Integrations |
 | `model` | Models & Providers |

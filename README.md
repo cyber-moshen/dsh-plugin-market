@@ -4,7 +4,11 @@ Open-source plugin market for the [DeepSeek Harness](https://github.com/deepseek
 
 A card-grid **Plugin Market** tab under **Settings → Plugins**:
 
-- one card per plugin with **GitHub stars**, **last-commit freshness** (colored maintenance signal), and one-click **install / uninstall** (runs the real `dsh plugin` CLI with all the quirks of this setup handled);
+- **tags** — every plugin carries up to 5 searchable tags (e.g. `记忆增强`, `UI美化`); tags render on the card and click-to-search; the search box matches names, descriptions, authors **and tags**;
+- **GitHub stars**, **last-commit freshness** (colored maintenance signal);
+- **version-aware actions** — not installed → `安装`; installed with a newer version → `已安装 vX` + `更新 → vY`; installed and current → `已安装 vX` (text only). Latest versions come from the npm registry (npm-published plugins) or the repo's `package.json` (otherwise), all cached;
+- **GitHub token setting** — paste a token in the panel to lift API rate limits (falls back to `GITHUB_TOKEN`/`GH_TOKEN` env);
+- **auto-update** — optional: the host automatically updates installed plugins that have newer versions (sequential background loop);
 - the **GitHub icon button** on each card jumps straight to the repo — no in-app README viewer;
 - icons are GitHub's own [octicons](https://github.com/primer/octicons) (MIT), inlined as SVG.
 

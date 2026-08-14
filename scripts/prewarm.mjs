@@ -37,9 +37,12 @@ function call(method, body) {
 const probe = await call('probe', {})
 console.log('[smoke] probe:', probe.slice(0, 500))
 
+const cfg = await call('config', {})
+console.log('[smoke] config:', cfg.slice(0, 200))
+
 const listStart = Date.now()
 const list = await call('list', { lang: 'zh' })
-console.log('[smoke] list in', Date.now() - listStart, 'ms:', list.slice(0, 600))
+console.log('[smoke] list in', Date.now() - listStart, 'ms:', list.slice(0, 700))
 
 console.log('[prewarm] fill loop running; waiting for its time budget to expire…')
 await new Promise((r) => setTimeout(r, 130000))

@@ -58,6 +58,21 @@ const starsOf = (owner, repo) => {
 const upstream = await loadUpstream(source)
 const plugins = upstream.plugins || []
 const categories = upstream.categories || {}
+
+/** Seed tags derived from the plugin category (the repo owner curates more). */
+const CATEGORY_TAGS = {
+  ui: ['UI增强'],
+  theme: ['主题外观'],
+  session: ['会话'],
+  memory: ['记忆增强'],
+  tools: ['工具增强'],
+  workflow: ['工作流'],
+  notify: ['通知集成'],
+  model: ['模型接入'],
+  dev: ['开发工具'],
+  fun: ['娱乐'],
+}
+
 const groups = new Map()
 for (const p of plugins) {
   const cat = p.category || 'other'
@@ -69,12 +84,28 @@ for (const [cat, list] of groups) {
   const ranked = [...list]
     .map((p) => ({ p, stars: starsOf(p.owner, p.url ? p.url.split('/').slice(-2).join('/').replace(/\.git$/, '') : '') }))
     .sort((a, b) => b.stars - a.stars || String(a.p.name).localeCompare(String(b.p.name)))
-  for (const { p } of ranked.slice(0, top)) kept.push(p)
+  for (const { p } of ranked.slice(0, top)) {
+    const entry = { ...p }
+    // Normalize names: some upstream entries are "owner/name" — strip the owner prefix.
+    if (typeof entry.name === 'string' && entry.name.includes('/')) {
+      const slash = entry.name.indexOf('/')
+      if (entry.name.slice(0, slash) === entry.owner) entry.name = entry.name.slice(slash + 1)
+    }
+    entry.tags = CATEGORY_TAGS[p.category] ? [...CATEGORY_TAGS[p.category]] : []
+    kept.push(entry)
+  }
 }
 // stable category order: upstream order, then unknown categories alphabetically
 const catOrder = [...Object.keys(categories), ...[...groups.keys()].filter((c) => !(c in categories))].filter((c, i, a) => a.indexOf(c) === i)
 const ordered = []
 for (const cat of catOrder) ordered.push(...kept.filter((p) => (p.category || 'other') === cat))
+
+// Disambiguate duplicate names (two different repos can share a name, e.g. dsh-memory).
+const used = new Set()
+for (const e of ordered) {
+  if (used.has(e.name)) e.name = `${e.name} (${e.owner})`
+  used.add(e.name)
+}
 
 const result = {
   name: 'dsh-plugin-market',

@@ -37,6 +37,15 @@ for (const [i, p] of (root.plugins || []).entries()) {
   if (typeof p.install !== 'string' || !/^dsh plugin --profile \S+ (add|remove) \S+/.test(p.install)) {
     errors.push(at + '.install must be like "dsh plugin --profile web add <pkg>"')
   }
+  if (p.tags !== undefined) {
+    if (!Array.isArray(p.tags) || p.tags.length > 5) {
+      errors.push(at + '.tags must be an array of at most 5 strings (or omit it)')
+    } else {
+      for (const tg of p.tags) {
+        if (typeof tg !== 'string' || !tg.trim()) errors.push(at + '.tags contains an empty tag')
+      }
+    }
+  }
   if (seen.has(p.name)) errors.push('duplicate name "' + p.name + '"')
   seen.add(p.name)
 }
