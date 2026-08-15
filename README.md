@@ -16,6 +16,7 @@ A **Settings → Plugin Workshop (插件工坊)** page with:
 - the **whole workshop follows the app's own language** (Settings → General → Language: 中文 / English);
 - a frame-wide toast after a boot-time auto-update — pure-JS plugins hot-reload in place, plugins with native modules ask for a restart.
 - **hot reload** — installing/updating/uninstalling a pure-JS plugin applies it to the running process immediately and refreshes the page; no restart needed. Plugins shipping native modules (`.node`) are detected and prompt for a restart instead.
+- **boot-safety net on every install** — a pre-install dependency audit plus an automatic post-install boot-composition check with rollback, so a broken plugin can never leave the profile unbootable (see [Safety net](#safety-net)).
 
 **The catalog is this repo's own `data/plugins.json`** — anyone can add a plugin by opening a pull request (see [Submitting a PR](#submitting-a-pr-to-add-your-plugin)). The plugin fetches it live at runtime; there is no offline cache or snapshot.
 
@@ -57,6 +58,22 @@ Restart the web server, then open **Settings → Plugin Workshop**. After that, 
 
 - **GitHub Token (optional)** — paste a token to raise the API rate limit from 60 requests/hour to 5000/hour. See [How to get a token](#how-to-get-a-github-token). The `GITHUB_TOKEN` / `GH_TOKEN` environment variables take precedence. Saving an empty box never clears a stored token; use the `Clear` button to remove it.
 - **Auto-update installed plugins on startup** — when enabled, the web server checks installed plugins after boot and updates any with newer versions; pure-JS plugins hot-reload in place, native ones show a restart toast.
+
+## Safety net
+
+Installing a bad plugin that bricks DSH at the next boot is the deadliest failure mode for a market tool. `dsh plugin` automatically mounts **every dependency that declares `dsh.bundle`** as its own profile layer, so "kitchen-sink" aggregate plugins (e.g. the `dsh-web-ui` family) routinely duplicate loader entries (`duplicate loader entry id: ui-skin-center`) and kill the whole process on startup. The workshop defends against this on three levels:
+
+1. **Pre-install dependency audit (bundle fan-out detection)** — before installing, the target's dependency tree is fetched and every package that also declares `dsh.bundle` is listed. If "fan-out" is detected (one plugin would enable many profile layers at once), a clear warning is shown and the install requires an explicit "I understand the risk" confirmation.
+2. **Post-install boot-composition check (the authoritative gate)** — after `pnpm` finishes and before any hot-apply, the new bundle stack is composed in a throwaway subprocess with the *exact same* loader/include machinery the real boot uses (`scripts/compose-check.mjs`). Duplicate loader ids, invalid config, and missing packages all surface there.
+3. **Automatic rollback** — when the check fails, the profile's `package.json` is restored from a pre-op snapshot and the package is uninstalled; the task shows "auto-rolled back" with the reason. The profile is **never left in an unbootable state**, no matter what was installed.
+
+There is also an **offline repair script** for profiles that are already broken (e.g. a plugin installed from the CLI directly):
+
+```sh
+node <dsh-plugin-market checkout>/scripts/repair.mjs --profile web
+```
+
+It repeatedly runs the composition check and removes non-base bundle layers until the profile composes again.
 
 ## How to get a GitHub Token
 
