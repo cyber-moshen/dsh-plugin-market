@@ -14,7 +14,8 @@ A **Settings → Plugin Workshop (插件工坊)** page with:
 - a **GitHub icon button** on every card jumping straight to the repo;
 - a **settings modal** with a **GitHub Token** field (lifts API rate limits) and a **startup auto-update** toggle;
 - the **whole workshop follows the app's own language** (Settings → General → Language: 中文 / English);
-- a frame-wide **"plugins auto-updated — restart to apply"** toast after a boot-time auto-update.
+- a frame-wide toast after a boot-time auto-update — pure-JS plugins hot-reload in place, plugins with native modules ask for a restart.
+- **hot reload** — installing/updating/uninstalling a pure-JS plugin applies it to the running process immediately and refreshes the page; no restart needed. Plugins shipping native modules (`.node`) are detected and prompt for a restart instead.
 
 **The catalog is this repo's own `data/plugins.json`** — anyone can add a plugin by opening a pull request (see [Submitting a PR](#submitting-a-pr-to-add-your-plugin)). The plugin fetches it live at runtime; there is no offline cache or snapshot.
 
@@ -32,7 +33,7 @@ From a local checkout:
 dsh plugin --profile web add ./dsh-plugin-market -w
 ```
 
-Restart the web server, then open **Settings → Plugin Workshop**.
+Restart the web server, then open **Settings → Plugin Workshop**. After that, installing/updating pure-JS plugins needs no restart.
 
 ## Usage
 
@@ -55,7 +56,7 @@ Restart the web server, then open **Settings → Plugin Workshop**.
 ### Settings modal (the `Settings` button next to the search box)
 
 - **GitHub Token (optional)** — paste a token to raise the API rate limit from 60 requests/hour to 5000/hour. See [How to get a token](#how-to-get-a-github-token). The `GITHUB_TOKEN` / `GH_TOKEN` environment variables take precedence. Saving an empty box never clears a stored token; use the `Clear` button to remove it.
-- **Auto-update installed plugins on startup** — when enabled, the web server checks installed plugins after boot and updates any with newer versions; once done, a toast on the home page asks you to restart the web server to apply.
+- **Auto-update installed plugins on startup** — when enabled, the web server checks installed plugins after boot and updates any with newer versions; pure-JS plugins hot-reload in place, native ones show a restart toast.
 
 ## How to get a GitHub Token
 
