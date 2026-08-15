@@ -1,70 +1,14 @@
 {
   "name": "dsh-plugin-market",
   "url": "https://github.com/cyber-moshen/dsh-plugin-market",
-  "updated": "2026-08-14",
+  "updated": "2026-08-15",
   "plugins": [
     {
-      "url": "https://github.com/HsiangNianian/dsh-auto-continue",
+      "url": "https://github.com/Jesse-njx/dsh-memory",
       "tags": [
-        "UI增强"
+        "记忆增强"
       ],
-      "npm": "dsh-client-auto-continue"
-    },
-    {
-      "url": "https://github.com/Starfie1d1272/dsh-builtin-toggles",
-      "tags": [
-        "UI增强"
-      ],
-      "npm": "dsh-builtin-toggles"
-    },
-    {
-      "url": "https://github.com/liliuCourier/dsh-chat-outline",
-      "tags": [
-        "UI增强"
-      ],
-      "npm": "dsh-chat-outline"
-    },
-    {
-      "url": "https://github.com/Sttrevens/dsh-cost-meter",
-      "tags": [
-        "UI增强"
-      ],
-      "npm": "@steven-wu/dsh-cost-meter"
-    },
-    {
-      "url": "https://github.com/ZSeven-W/dsh-openpencil",
-      "tags": [
-        "UI增强"
-      ],
-      "npm": "@zseven-w/dsh-openpencil"
-    },
-    {
-      "url": "https://github.com/nonewind/dsh-spend",
-      "tags": [
-        "UI增强"
-      ],
-      "npm": "dsh-spend"
-    },
-    {
-      "url": "https://github.com/Luaphes/dsh-web-attention-badge",
-      "tags": [
-        "UI增强"
-      ],
-      "npm": "dsh-web-attention-badge"
-    },
-    {
-      "url": "https://github.com/Nwflower/dsh-file-claim",
-      "tags": [
-        "会话"
-      ],
-      "npm": "dsh-file-claim"
-    },
-    {
-      "url": "https://github.com/Wine-Red/dsh-prompt-stash",
-      "tags": [
-        "会话"
-      ],
-      "npm": "dsh-prompt-stash"
+      "npm": "dsh-memory"
     },
     {
       "url": "https://github.com/omdsh-dev/dsh-mnemon",
@@ -74,158 +18,81 @@
       "npm": "dsh-mnemon"
     },
     {
-      "url": "https://github.com/taxueseek/argo",
+      "url": "https://github.com/gezi-wen/sage-mem",
       "tags": [
-        "工具增强"
+        "记忆增强"
       ],
-      "npm": "argo-search"
+      "npm": "sage-mem"
     },
     {
-      "url": "https://github.com/awesome-dsh-plugin/dsh-find-plugin",
+      "url": "https://github.com/Aik358/dsh-auto-memory",
       "tags": [
-        "工具增强"
+        "记忆增强"
       ],
-      "npm": "dsh-find-plugin"
+      "npm": "@a9i5k4/dsh-auto-memory"
     },
     {
-      "url": "https://github.com/1na-ko/dsh-hdc-bridge",
+      "url": "https://github.com/liustack/modlens",
       "tags": [
-        "工具增强"
+        "视觉"
       ],
-      "npm": "dsh-hdc-bridge"
+      "npm": "@liustack/modlens"
     },
     {
-      "url": "https://github.com/dsh-market/dsh-market",
+      "url": "https://github.com/SnowCrescenter-tech/dsh-milestone",
       "tags": [
-        "工具增强"
+        "UI增强"
       ],
-      "npm": "dshmarket"
+      "npm": "dsh-milestone"
     },
     {
-      "url": "https://github.com/PicGo/dsh-plugin",
+      "url": "https://github.com/ccq1/dsh-side-panel",
       "tags": [
-        "工具增强"
+        "UI增强"
       ],
-      "npm": "@picgo/dsh-plugin"
+      "npm": "dsh-side-panel"
     },
     {
-      "url": "https://github.com/zp-home/dsh-recommend",
+      "url": "https://github.com/Ghost011118/dsh-balance-meter",
       "tags": [
-        "工具增强"
+        "UI增强"
       ],
-      "npm": "dsh-recommend"
+      "npm": "dsh-balance-meter"
     },
     {
-      "url": "https://github.com/Letter2025/dsh-tool-search",
+      "url": "https://github.com/zhu1090093659/dsh-web-ui",
       "tags": [
-        "工具增强"
+        "UI增强"
       ],
-      "npm": "dsh-tool-search"
+      "npm": "@linxin666/dsh-web-ui-all"
     },
     {
-      "url": "https://github.com/Anionex/dsh-vision-toolkit",
+      "url": "https://github.com/omdsh-dev/DSH-better-sidebar",
       "tags": [
-        "工具增强"
+        "UI增强"
       ],
-      "npm": "@anionex/dsh-vision-toolkit"
+      "npm": "dsh-better-sidebar"
     },
     {
-      "url": "https://github.com/TonyDua/dsh-web-search-exa",
+      "url": "https://github.com/Nwflower/dsh-chat-import",
       "tags": [
-        "工具增强"
+        "流程与效率"
       ],
-      "npm": "@tonydua/dsh-web-search-exa"
+      "npm": "dsh-chat-import"
     },
     {
-      "url": "https://github.com/Sanqi-normal/dsh-webui-market-plugin",
+      "url": "https://github.com/Ceelog/dsh-plugins",
       "tags": [
-        "工具增强"
+        "流程与效率"
       ],
-      "npm": "@sanqi-normal/dsh-webui-market-plugin"
+      "npm": "@opendsh/dsh-plugin-scheduled-tasks"
     },
     {
-      "url": "https://github.com/Letter2025/dsh-approval-llm",
+      "url": "https://github.com/NanmiCoder/dsh-agent-teams",
       "tags": [
-        "工作流"
+        "多智能体协作"
       ],
-      "npm": "dsh-approval-llm"
-    },
-    {
-      "url": "https://github.com/Letter2025/dsh-model-failover",
-      "tags": [
-        "工作流"
-      ],
-      "npm": "dsh-model-failover"
-    },
-    {
-      "url": "https://github.com/openma-ai/deepseek-harness-acp",
-      "tags": [
-        "通知集成"
-      ],
-      "npm": "@openma/deepseek-harness-acp"
-    },
-    {
-      "url": "https://github.com/suntianc/dsh-codex-auth",
-      "tags": [
-        "模型接入"
-      ],
-      "npm": "dsh-codex-auth"
-    },
-    {
-      "url": "https://github.com/franksong2702/dsh-codex-connect",
-      "tags": [
-        "模型接入"
-      ],
-      "npm": "dsh-codex-connect"
-    },
-    {
-      "url": "https://github.com/Leon0555/dsh-lan-access",
-      "tags": [
-        "开发工具"
-      ],
-      "npm": "dsh-lan-access"
-    },
-    {
-      "url": "https://github.com/030611/dsh-telemetry-redactor",
-      "tags": [
-        "开发工具"
-      ],
-      "npm": "dsh-telemetry-redactor"
-    },
-    {
-      "url": "https://github.com/030611/dsh-verification-receipt",
-      "tags": [
-        "开发工具"
-      ],
-      "npm": "dsh-verification-receipt"
-    },
-    {
-      "url": "https://github.com/anweat/dsh-browser",
-      "tags": [
-        "娱乐"
-      ],
-      "npm": "@anweat/dsh-browser"
-    },
-    {
-      "url": "https://github.com/anweat/dsh-restart",
-      "tags": [
-        "娱乐"
-      ],
-      "npm": "dsh-restart"
-    },
-    {
-      "url": "https://github.com/anweat/dsh-voice-webspeech",
-      "tags": [
-        "娱乐"
-      ],
-      "npm": "dsh-voice-webspeech"
-    },
-    {
-      "url": "https://github.com/anweat/dsh-web-search-pro",
-      "tags": [
-        "娱乐"
-      ],
-      "npm": "dsh-web-search-pro"
+      "npm": "@nanmicoder/dsh-agent-teams"
     }
   ]
 }
