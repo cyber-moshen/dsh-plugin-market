@@ -93,6 +93,16 @@
         "多智能体协作"
       ],
       "npm": "@nanmicoder/dsh-agent-teams"
+    },
+    {
+      "url": "https://github.com/Walvez/dsh-codex-sync",
+      "tags": [
+        "Codex",
+        "MCP",
+        "Skills",
+        "会话导入"
+      ],
+      "npm": "dsh-codex-sync"
     }
   ]
 }
